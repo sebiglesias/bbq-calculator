@@ -1,0 +1,15 @@
+{
+  "name": "BBQ Meat per Person Calculator",
+  "short_name": "BBQCalc",
+  "start_url": "/bbq-calculator/",
+  "display": "standalone",
+  "background_color": "#14130F",
+  "theme_color": "#EA580C",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

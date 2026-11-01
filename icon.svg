@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="128" fill="#171a21"/>
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="none" stroke="#272c3b" stroke-width="8"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#3b82f6" stroke-width="24" stroke-dasharray="12 12"/>
+  <path d="M160 260 L230 330 L360 190" fill="none" stroke="#10b981" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="120" y="380" width="272" height="56" rx="12" fill="#272c3b"/>
+  <text x="256" y="420" font-family="-apple-system, sans-serif" font-weight="bold" font-size="32" fill="#f0f3f8" text-anchor="middle" letter-spacing="4">APP OK</text>
+</svg>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBQ Meat per Person Calculator | Smoker, Brisket & Pulled Pork Estimator</title>
+<meta name="description" content="Calculate exactly how much raw brisket, pulled pork, ribs, and chicken to buy for your BBQ party. Accounts for 40-50% smoker shrinkage, side dishes, wood pellets, and USD bill split.">
+<link rel="canonical" href="https://sebiglesias.com.ar/bbq-calculator/">
+<meta name="theme-color" content="#EA580C">
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<!-- Google tag (gtag.js) GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2BNDBQP0W7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2BNDBQP0W7');
+</script>
+
+<!-- Open Graph / Social -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="BBQ Meat per Person Calculator | Smoker & Brisket Guide">
+<meta property="og:description" content="Never run out of meat or overspend at Costco. Raw vs cooked weights for brisket, pulled pork, and ribs.">
+<meta property="og:url" content="https://sebiglesias.com.ar/bbq-calculator/">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BBQ Meat per Person Calculator">
+<meta name="twitter:description" content="Calculate raw meat purchasing weights with smoker shrinkage factors.">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<!-- Google AdSense -->
+<meta name="google-adsense-account" content="ca-pub-3381238987477190">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3381238987477190" crossorigin="anonymous"></script>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BBQ Meat per Person Calculator",
+    "url": "https://sebiglesias.com.ar/bbq-calculator/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "description": "Calculates raw vs cooked meat weights for American BBQ (smoked brisket, pulled pork, baby back ribs, chicken) taking into account 40% to 50% smoker shrinkage.",
+    "author": {
+      "@type": "Person",
+      "name": "Sebastián Iglesias",
+      "url": "https://sebiglesias.com.ar"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much raw brisket do I need per person?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Plan on 1 pound (16 oz) of raw whole packer brisket per person. A whole brisket loses approximately 40% to 50% of its initial weight between fat trimming and 12-hour smoke rendering, yielding approximately 1/2 pound (8 oz) of cooked sliced brisket per guest."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much pulled pork per person for a sandwich?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A standard BBQ sandwich uses 1/3 pound (5 to 6 oz) of cooked pulled pork. Because pork shoulder / Boston butt loses 40% to 45% of its weight during smoking (bone and fat rendering), purchase approximately 0.7 to 0.8 lbs of raw pork butt per person."
+        }
+      }
+    ]
+  }
+]
+</script>
+</head>
+<body>
+<main class="wrap">
+  <div class="backlink-bar">
+    <a href="https://sebiglesias.com.ar" class="backlink">← sebiglesias.com.ar</a>
+  </div>
+
+  <header>
+    <div class="badge-parrilla">🍖 Smokehouse & Pitmaster Utility</div>
+    <h1>BBQCalc<span class="accent">.</span></h1>
+    <p class="sub">BBQ Meat per Person Calculator · raw vs cooked smoker weights & butcher list</p>
+  </header>
+
+  <!-- Live Smoker Firebox Canvas Visualizer -->
+  <div class="parrilla-stage" aria-label="Live smoker visualizer">
+    <div class="parrilla-header">
+      <div class="parrilla-title">
+        <span>🔥</span> The Offset Smoker
+      </div>
+      <div class="parrilla-live-badge">
+        <span class="pulse-dot"></span> CLEAN BLUE SMOKE
+      </div>
+    </div>
+    <div class="canvas-container">
+      <canvas id="parrilla-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Headcount Card -->
+  <section class="section-card">
+    <p class="label">👥 Headcount & Appetite</p>
+    <div class="grid-steppers">
+      <div class="stepper-card">
+        <div class="stepper-icon">👨</div>
+        <div class="stepper-name">Adults (Hungry)</div>
+        <div class="stepper-ctrl">
+          <button type="button" id="men-minus" aria-label="decrease">−</button>
+          <span class="val" id="men-val">8</span>
+          <button type="button" id="men-plus" aria-label="increase">+</button>
+        </div>
+      </div>
+      <div class="stepper-card">
+        <div class="stepper-icon">👩</div>
+        <div class="stepper-name">Adults (Moderate)</div>
+        <div class="stepper-ctrl">
+          <button type="button" id="women-minus" aria-label="decrease">−</button>
+          <span class="val" id="women-val">6</span>
+          <button type="button" id="women-plus" aria-label="increase">+</button>
+        </div>
+      </div>
+      <div class="stepper-card">
+        <div class="stepper-icon">🧒</div>
+        <div class="stepper-name">Kids (Under 12)</div>
+        <div class="stepper-ctrl">
+          <button type="button" id="kids-minus" aria-label="decrease">−</button>
+          <span class="val" id="kids-val">4</span>
+          <button type="button" id="kids-plus" aria-label="increase">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appetite Segment -->
+    <div class="field mt" style="margin-top: 1.25rem;">
+      <label>Event Style</label>
+      <div class="segments" id="appetite-seg" role="radiogroup">
+        <button type="button" data-v="light" aria-pressed="false">Light Buffet <span class="seg-sub">Heavy sides</span></button>
+        <button type="button" data-v="standard" aria-pressed="true">Standard BBQ <span class="seg-sub">Classic balance</span></button>
+        <button type="button" data-v="meatlover" aria-pressed="false">Carnivore Feast <span class="seg-sub">All meat, few sides</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Big Hero Results Display -->
+  <section class="hero-result" aria-live="polite">
+    <div class="hero-main">
+      <span class="num" id="total-raw-lbs">22.5</span>
+      <div class="hero-labels">
+        <span class="unit">LBS Raw Meat to Buy</span>
+        <span class="hero-detail">Yields <strong id="total-cooked-lbs">~12.0 lbs</strong> cooked meat after smoker shrinkage</span>
+      </div>
+    </div>
+    <div class="hero-badge" id="hero-badge">
+      Accounts for 45% fat rendering & bone loss
+    </div>
+  </section>
+
+  <!-- Butcher Shopping List -->
+  <section class="card" aria-labelledby="sec-butcher">
+    <h2 id="sec-butcher">Pitmaster Butcher Shopping List</h2>
+    <p class="section-desc">Raw purchasing weights needed for your local butcher or warehouse club:</p>
+    
+    <div class="shopping-list-grid" id="butcher-list">
+      <!-- Injected via JS -->
+    </div>
+  </section>
+
+  <!-- Sides & Charcoal / Fuel Card -->
+  <section class="card" aria-labelledby="sec-sides">
+    <h2 id="sec-sides">Sides, Buns & Smoker Fuel</h2>
+    <div class="sides-grid" id="sides-grid">
+      <!-- Injected via JS -->
+    </div>
+  </section>
+
+  <!-- Bill Split Card -->
+  <section class="card">
+    <h2>Split the Meat & Grocery Bill</h2>
+    <div class="row">
+      <div class="field">
+        <label for="total-bbq-cost">Total Receipt Bill ($ USD)</label>
+        <div class="input-prefix">
+          <span class="prefix">$</span>
+          <input type="number" id="total-bbq-cost" placeholder="e.g. 185.00" min="0" step="5">
+        </div>
+      </div>
+      <div class="field">
+        <label for="bbq-venmo">Venmo / Zelle / CashApp</label>
+        <input type="text" id="bbq-venmo" placeholder="@Pitmaster or phone" maxlength="50">
+      </div>
+    </div>
+
+    <div class="split-display">
+      <div class="split-col">
+        <span class="split-label">Per Adult Paying</span>
+        <span class="split-val" id="cost-per-adult">$0.00</span>
+      </div>
+      <div class="split-col">
+        <span class="split-label">Total Guests</span>
+        <span class="split-val" id="total-guests-count">18 people</span>
+      </div>
+    </div>
+
+    <button type="button" class="btn-share" id="btn-copy-bbq">
+      <span>📋</span> Copy Butcher List & Order Summary
+    </button>
+  </section>
+
+  <!-- AdSense Responsive Placement -->
+  <div class="adsense-wrap" style="text-align: center; margin: 2rem 0;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3381238987477190"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!-- FAQ Section -->
+  <section class="card faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <h3>Why does brisket lose so much weight during smoking?</h3>
+      <p>A full packer beef brisket typically undergoes a 40% to 50% total weight reduction. Approximately 15% is lost during the initial trimming of hard deckle fat and thin silver skin. The remaining 30% to 35% is moisture evaporation and intramuscular fat rendering during the 12 to 16-hour low-and-slow smoke at 225°F–250°F.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How many racks of ribs for 10 adults?</h3>
+      <p>For standard St. Louis cut pork ribs (12 to 13 bones per slab), plan on **3 to 4 racks for 10 adults** (approx 3 to 4 ribs per person when served alongside other meats like pulled pork or brisket).</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Part of the <a href="https://sebiglesias.com.ar">sebiglesias.com.ar</a> utility tools suite.</p>
+    <p class="copy">Free outdoor cooking utility · Smoke on</p>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
