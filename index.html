@@ -6,6 +6,17 @@
 <title>BBQ Meat per Person Calculator | Smoker, Brisket & Pulled Pork Estimator</title>
 <meta name="description" content="Calculate exactly how much raw brisket, pulled pork, ribs, and chicken to buy for your BBQ party. Accounts for 40-50% smoker shrinkage, side dishes, wood pellets, and USD bill split.">
 <link rel="canonical" href="https://sebiglesias.com.ar/bbq-calculator/">
+  <link rel="alternate" hreflang="en" href="https://sebiglesias.com.ar/bbq-calculator/">
+  <link rel="alternate" hreflang="es" href="https://sebiglesias.com.ar/bbq-calculator/?lang=es">
+  <link rel="alternate" hreflang="de" href="https://sebiglesias.com.ar/bbq-calculator/?lang=de">
+  <link rel="alternate" hreflang="fr" href="https://sebiglesias.com.ar/bbq-calculator/?lang=fr">
+  <link rel="alternate" hreflang="it" href="https://sebiglesias.com.ar/bbq-calculator/?lang=it">
+  <link rel="alternate" hreflang="pt" href="https://sebiglesias.com.ar/bbq-calculator/?lang=pt">
+  <link rel="alternate" hreflang="nl" href="https://sebiglesias.com.ar/bbq-calculator/?lang=nl">
+  <link rel="alternate" hreflang="sv" href="https://sebiglesias.com.ar/bbq-calculator/?lang=sv">
+  <link rel="alternate" hreflang="da" href="https://sebiglesias.com.ar/bbq-calculator/?lang=da">
+  <link rel="alternate" hreflang="pl" href="https://sebiglesias.com.ar/bbq-calculator/?lang=pl">
+  <link rel="alternate" hreflang="x-default" href="https://sebiglesias.com.ar/bbq-calculator/">
 <meta name="theme-color" content="#EA580C">
 <meta name="robots" content="index, follow, max-image-preview:large">
 
@@ -85,8 +96,20 @@
 </head>
 <body>
 <main class="wrap">
-  <div class="backlink-bar">
+  <div class="backlink-bar" style="display:flex;align-items:center;justify-content:space-between">
     <a href="https://sebiglesias.com.ar" class="backlink">← sebiglesias.com.ar</a>
+      <select id="lang-select" aria-label="Language" style="background:#24221C;border:1px solid rgba(242,239,230,.18);color:#F2EFE6;font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:3px 6px;border-radius:3px;cursor:pointer;margin-left:auto">
+  <option value="en">🇺🇸 EN</option>
+  <option value="es">🇪🇸 ES</option>
+  <option value="de">🇩🇪 DE</option>
+  <option value="fr">🇫🇷 FR</option>
+  <option value="it">🇮🇹 IT</option>
+  <option value="pt">🇵🇹 PT</option>
+  <option value="nl">🇳🇱 NL</option>
+  <option value="sv">🇸🇪 SV</option>
+  <option value="da">🇩🇰 DA</option>
+  <option value="pl">🇵🇱 PL</option>
+</select>
   </div>
 
   <header>
@@ -290,5 +313,41 @@
 </main>
 
 <script src="app.js"></script>
+
+<script>
+/* I18N_AUTO_ENGINE */
+(function(){
+  const DICT = {"en": {"title": "BBQ Meat Calculator<span class='accent'>.</span>", "sub": "Brisket, pulled pork & ribs per person · smoker shrinkage & butcher list"}, "es": {"title": "Calculadora de Carne para Barbacoa<span class='accent'>.</span>", "sub": "Cantidad de carne, costillas y guarniciones por invitado sin que sobre ni falte"}, "de": {"title": "BBQ & Grillfleisch Rechner<span class='accent'>.</span>", "sub": "Fleischmenge pro Person für Grillparty, Brisket, Ribs & Beilagen"}, "fr": {"title": "Calculateur Viande Barbecue<span class='accent'>.</span>", "sub": "Quantité de viande, travers de porc et accompagnements par personne"}, "it": {"title": "Calcolatore Carne Grigliata & BBQ<span class='accent'>.</span>", "sub": "Quanta carne comprare a persona tra costine, brisket e contorni"}, "pt": {"title": "Calculadora de Carne para Churrasco & BBQ<span class='accent'>.</span>", "sub": "Quantidade exata por pessoa com perda de cozimento e acompanhamentos"}, "nl": {"title": "BBQ Vlees Calculator per Persoon<span class='accent'>.</span>", "sub": "Hoeveel vlees, spareribs en bijgerechten bestellen voor een barbecue"}, "sv": {"title": "BBQ & Grillkött Kalkylator<span class='accent'>.</span>", "sub": "Hur mycket kött per person till grillfesten · brisket, ribs & tillbehör"}, "da": {"title": "BBQ & Grillkød Beregner<span class='accent'>.</span>", "sub": "Hvor meget kød pr. person til grillfest · spareribs, brisket og tilbehør"}, "pl": {"title": "Kalkulator Mięsa na Grilla i BBQ<span class='accent'>.</span>", "sub": "Ile mięsa, żeberek i dodatków kupić na osobę na imprezę grillową"}};
+  const h1El = document.querySelector('h1');
+  const subEl = document.querySelector('.sub') || document.querySelector('header p');
+  const selEl = document.getElementById('lang-select');
+  function applyLang(lang) {
+    const entry = DICT[lang] || DICT.en;
+    document.documentElement.lang = lang;
+    if (h1El && entry.title) h1El.innerHTML = entry.title;
+    if (subEl && entry.sub) subEl.textContent = entry.sub;
+    if (lang !== 'en' && entry.sub) {
+      document.title = (h1El ? h1El.textContent : '') + ' — ' + entry.sub;
+    }
+  }
+  const params = new URLSearchParams(window.location.search);
+  const init = params.get('lang') || localStorage.getItem('bbq-calculator-lang') || 'en';
+  const valid = DICT[init] ? init : 'en';
+  if (selEl) {
+    selEl.value = valid;
+    selEl.addEventListener('change', function(e) {
+      const nl = e.target.value;
+      localStorage.setItem('bbq-calculator-lang', nl);
+      const u = new URL(window.location.href);
+      if (nl === 'en') u.searchParams.delete('lang');
+      else u.searchParams.set('lang', nl);
+      window.history.replaceState({}, '', u);
+      applyLang(nl);
+    });
+  }
+  applyLang(valid);
+})();
+</script>
+
 </body>
 </html>
